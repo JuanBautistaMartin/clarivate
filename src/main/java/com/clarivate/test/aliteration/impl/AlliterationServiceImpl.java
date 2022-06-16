@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class AlliterationServiceImpl implements AlliterationService  {
 
   public static final String SEPARATOR = " ";
+  public static final String WORDS_REGEXP = "\\W+";
   public static final String PERCENTAGE_SYMBOL = " %";
   private static final DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -22,21 +23,14 @@ public class AlliterationServiceImpl implements AlliterationService  {
   public String getAlliterationPercentagesOrderedDesc(String text) {
     Objects.requireNonNull(text, "Text cannot be null.");
 
-    text = text.toLowerCase();
-    StringBuilder alliterationResult = new StringBuilder();
-    String[] splittedText = text.split(SEPARATOR);
+    String[] splittedText = text.split(WORDS_REGEXP);
+    Integer numberOfWords = splittedText.length;
+
     Map<String, Integer> alliterationMap = fillMapWithFirstLettersAndRepetitionCount(splittedText);
 
     List<Map.Entry<String, Integer>> alliterationList = orderLettersByCount(alliterationMap);
 
-    alliterationList.forEach(entry ->
-      alliterationResult.append(entry.getKey())
-        .append(SEPARATOR)
-        .append(getPercentage(entry.getValue().doubleValue(), (double) splittedText.length))
-        .append(PERCENTAGE_SYMBOL)
-        .append("\n"));
-
-    return alliterationResult.toString();
+    return prepareResultString(alliterationList, numberOfWords);
 
   }
 
@@ -51,7 +45,7 @@ public class AlliterationServiceImpl implements AlliterationService  {
     Map<String, Integer> alliterationMap = new HashMap<>();
     Arrays.stream(textArray)
       .forEach(word -> {
-        var firstLetter = word.substring(0, 1);
+        var firstLetter = word.substring(0, 1).toLowerCase();
         if(alliterationMap.containsKey(firstLetter)) {
           alliterationMap.put(firstLetter, alliterationMap.get(firstLetter) + 1);
         } else {
@@ -64,5 +58,18 @@ public class AlliterationServiceImpl implements AlliterationService  {
 
   private String getPercentage(Double numberOfRepetitions, Double numberOfWords) {
     return decimalFormat.format((numberOfRepetitions / numberOfWords) * 100);
+  }
+
+  private String prepareResultString(List<Map.Entry<String, Integer>> alliterationList, Integer numberOfWords) {
+    var alliterationResult = new StringBuilder();
+
+    alliterationList.forEach(entry ->
+      alliterationResult.append(entry.getKey())
+        .append(SEPARATOR)
+        .append(getPercentage(entry.getValue().doubleValue(), (double) numberOfWords))
+        .append(PERCENTAGE_SYMBOL)
+        .append("\n"));
+
+    return alliterationResult.toString();
   }
 }
