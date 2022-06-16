@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AlliterationController {
 
+  private static final String TEXT_EMPTY = "Text cannot be empty";
+
   private final AlliterationService alliterationService;
 
   public AlliterationController(AlliterationService alliterationService) {
@@ -18,17 +20,17 @@ public class AlliterationController {
   }
 
   @PostMapping("/alliteration/all")
-  public String getAllAlliterationPercentagesOrderedAsc(@RequestBody String text) {
+  public ResponseEntity<String> getAllAlliterationPercentagesOrderedDesc(@RequestBody String text) {
     if(text.isBlank()) {
-      throw new TextNotEmptyException("Text cannot be empty");
+      throw new TextNotEmptyException(TEXT_EMPTY);
     }
-    return alliterationService.getAlliterationPercentagesOrderedDesc(text);
+    return new ResponseEntity<>(alliterationService.getAlliterationPercentagesOrderedDesc(text), HttpStatus.OK);
   }
 
   @PostMapping("/alliteration/max")
   public ResponseEntity<String> getAlliterationMaxPercentage(@RequestBody String text) {
     if(text.isBlank()) {
-      throw new TextNotEmptyException("Text cannot be empty");
+      throw new TextNotEmptyException(TEXT_EMPTY);
     }
     return new ResponseEntity<>(alliterationService.getAlliterationMaxPercentage(text), HttpStatus.OK);
   }
