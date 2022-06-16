@@ -23,14 +23,13 @@ public class AlliterationServiceImpl implements AlliterationService  {
   public String getAlliterationPercentagesOrderedDesc(String text) {
     Objects.requireNonNull(text, "Text cannot be null.");
 
-    String[] splittedText = text.split(WORDS_REGEXP);
-    Integer numberOfWords = splittedText.length;
+    String[] splittedText =  text.split(WORDS_REGEXP);
 
     Map<String, Integer> alliterationMap = fillMapWithFirstLettersAndRepetitionCount(splittedText);
 
     List<Map.Entry<String, Integer>> alliterationList = orderLettersByCount(alliterationMap);
 
-    return prepareResultString(alliterationList, numberOfWords);
+    return prepareResultString(alliterationList, splittedText.length);
 
   }
 
@@ -39,11 +38,10 @@ public class AlliterationServiceImpl implements AlliterationService  {
     Objects.requireNonNull(text, "Text cannot be null.");
 
     String[] splittedText = text.split(WORDS_REGEXP);
-    Integer numberOfWords = splittedText.length;
 
     Map<String, Integer> alliterationMap = fillMapWithFirstLettersAndRepetitionCount(splittedText);
 
-    return prepareResultString(alliterationMap, numberOfWords);
+    return prepareResultString(alliterationMap, splittedText.length);
 
   }
 
