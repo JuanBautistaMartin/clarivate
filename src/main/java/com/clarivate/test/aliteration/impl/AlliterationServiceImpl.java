@@ -34,6 +34,19 @@ public class AlliterationServiceImpl implements AlliterationService  {
 
   }
 
+  @Override
+  public String getAlliterationMaxPercentage(String text) {
+    Objects.requireNonNull(text, "Text cannot be null.");
+
+    String[] splittedText = text.split(WORDS_REGEXP);
+    Integer numberOfWords = splittedText.length;
+
+    Map<String, Integer> alliterationMap = fillMapWithFirstLettersAndRepetitionCount(splittedText);
+
+    return prepareResultString(alliterationMap, numberOfWords);
+
+  }
+
   private List<Map.Entry<String, Integer>> orderLettersByCount(Map<String, Integer> alliterationMap) {
     return alliterationMap.entrySet()
             .stream()
@@ -71,5 +84,12 @@ public class AlliterationServiceImpl implements AlliterationService  {
         .append("\n"));
 
     return alliterationResult.toString();
+  }
+
+  private String prepareResultString(Map<String, Integer> alliterationMap, Integer numberOfWords) {
+    return alliterationMap.entrySet().stream()
+      .max((entry1, entry2) -> entry1.getValue().compareTo(entry2.getValue()))
+      .map(entry -> entry.getKey() + SEPARATOR + getPercentage((double) entry.getValue(), (double) numberOfWords))
+      .orElse(null);
   }
 }

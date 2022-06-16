@@ -14,9 +14,14 @@ public class AlliterationController {
     this.alliterationService = alliterationService;
   }
 
-  @PostMapping("/alliteration")
+  @PostMapping("/alliteration/all")
   public String getAllAlliterationPercentagesOrderedAsc(@RequestBody String text) {
     return alliterationService.getAlliterationPercentagesOrderedDesc(text);
+  }
+
+  @PostMapping("/alliteration/max")
+  public String getAlliterationMaxPercentage(@RequestBody String text) {
+    return alliterationService.getAlliterationMaxPercentage(text);
   }
 
 }
