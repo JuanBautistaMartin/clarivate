@@ -1,6 +1,7 @@
 package com.clarivate.test.aliteration.impl;
 
 import com.clarivate.test.aliteration.AlliterationService;
+import com.clarivate.test.exceptions.TextNotEmptyException;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -21,7 +22,7 @@ public class AlliterationServiceImpl implements AlliterationService  {
 
   @Override
   public String getAlliterationPercentagesOrderedDesc(String text) {
-    Objects.requireNonNull(text, "Text cannot be null.");
+    checkIfTextIsBlank(text);
 
     String[] splittedText =  text.split(WORDS_REGEXP);
 
@@ -35,7 +36,7 @@ public class AlliterationServiceImpl implements AlliterationService  {
 
   @Override
   public String getAlliterationMaxPercentage(String text) {
-    Objects.requireNonNull(text, "Text cannot be null.");
+    checkIfTextIsBlank(text);
 
     String[] splittedText = text.split(WORDS_REGEXP);
 
@@ -87,7 +88,13 @@ public class AlliterationServiceImpl implements AlliterationService  {
   private String prepareResultString(Map<String, Integer> alliterationMap, Integer numberOfWords) {
     return alliterationMap.entrySet().stream()
       .max((entry1, entry2) -> entry1.getValue().compareTo(entry2.getValue()))
-      .map(entry -> entry.getKey() + SEPARATOR + getPercentage((double) entry.getValue(), (double) numberOfWords))
+      .map(entry -> entry.getKey() + SEPARATOR + getPercentage((double) entry.getValue(), (double) numberOfWords) + PERCENTAGE_SYMBOL)
       .orElse(null);
+  }
+
+  private void checkIfTextIsBlank(String text) {
+    if(text.isBlank()) {
+      throw new TextNotEmptyException("Text cannot be blank.");
+    }
   }
 }
