@@ -1,19 +1,16 @@
 package com.clarivate.test.alliteration.impl;
 
 import com.clarivate.test.aliteration.AlliterationService;
+import com.clarivate.test.aliteration.impl.AlliterationServiceImpl;
 import com.clarivate.test.exceptions.TextNotEmptyException;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
 class AlliterationServiceTest {
 
-  @Autowired
-  private AlliterationService alliterationService;
+  private AlliterationService alliterationService = new AlliterationServiceImpl();
 
   @Test
   void getAlliterationMaxPercentageWithEmptyText() {
