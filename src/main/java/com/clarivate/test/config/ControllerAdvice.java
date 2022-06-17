@@ -13,7 +13,7 @@ class ControllerAdvice {
   protected ResponseEntity<ExceptionError> handleTextNotEmptyException(TextNotEmptyException ex) {
     return buildResponseEntity(
       ExceptionError.builder()
-        .status(HttpStatus.NOT_FOUND.toString())
+        .status(HttpStatus.BAD_REQUEST.toString())
         .message(ex.getMessage())
         .build());
   }
