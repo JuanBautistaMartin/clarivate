@@ -37,7 +37,7 @@ public class AlliterationServiceImpl implements AlliterationService  {
   public String getAlliterationMaxPercentage(String text) {
     checkIfTextIsBlank(text);
 
-    String[] splittedText = text.split(WORDS_REGEXP);
+    String[] splittedText = text.trim().split(WORDS_REGEXP);
 
     Map<String, Integer> alliterationMap = fillMapWithFirstLettersAndRepetitionCount(splittedText);
 
@@ -57,11 +57,7 @@ public class AlliterationServiceImpl implements AlliterationService  {
     Arrays.stream(textArray)
       .forEach(word -> {
         var firstLetter = word.substring(0, 1).toLowerCase();
-        if(alliterationMap.containsKey(firstLetter)) {
-          alliterationMap.put(firstLetter, alliterationMap.get(firstLetter) + 1);
-        } else {
-          alliterationMap.put(firstLetter, 1);
-        }
+        alliterationMap.put(firstLetter, alliterationMap.getOrDefault(firstLetter, 0) + 1);
       });
 
     return alliterationMap;
