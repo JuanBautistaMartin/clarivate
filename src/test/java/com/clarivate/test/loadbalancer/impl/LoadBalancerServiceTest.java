@@ -36,9 +36,21 @@ class LoadBalancerServiceTest {
   }
 
   @Test
-  void loadBalancerCanDistributeRequestProperly() {
+  void loadBalancerCanBalanceAndNumberOfRequestInSumAreHigherThanRequestLengthPlusTwoDropped() {
     // given
     Integer[] requests = {1,3,4,2,2,2,1,1,2};
+
+    // when
+    boolean result = loadBalancerService.loadBalancer(requests);
+
+    // then
+    assertTrue(result);
+  }
+
+  @Test
+  void loadBalancerCanBalanceAndNumberOfRequestInSumAreEqualsToRequestLengthMinusTwoDropped() {
+    // given
+    Integer[] requests = {1,2,2,2,2,1,1,2};
 
     // when
     boolean result = loadBalancerService.loadBalancer(requests);
