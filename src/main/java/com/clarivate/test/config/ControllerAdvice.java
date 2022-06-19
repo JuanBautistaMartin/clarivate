@@ -19,6 +19,6 @@ class ControllerAdvice {
   }
 
   private ResponseEntity<ExceptionError> buildResponseEntity(ExceptionError error) {
-    return new ResponseEntity<ExceptionError>(error, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 }
