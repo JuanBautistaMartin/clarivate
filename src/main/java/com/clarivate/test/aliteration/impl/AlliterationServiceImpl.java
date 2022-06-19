@@ -2,6 +2,7 @@ package com.clarivate.test.aliteration.impl;
 
 import com.clarivate.test.aliteration.AlliterationService;
 import com.clarivate.test.exceptions.TextNotEmptyException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -23,7 +24,7 @@ public class AlliterationServiceImpl implements AlliterationService  {
   public String getAlliterationPercentagesOrderedDesc(String text) {
     checkIfTextIsBlank(text);
 
-    String[] splittedText =  text.trim().split(WORDS_REGEXP);
+    String[] splittedText =  this.prepareText(text);
 
     Map<String, Integer> alliterationMap = fillMapWithFirstLettersAndRepetitionCount(splittedText);
 
@@ -37,7 +38,7 @@ public class AlliterationServiceImpl implements AlliterationService  {
   public String getAlliterationMaxPercentage(String text) {
     checkIfTextIsBlank(text);
 
-    String[] splittedText = text.trim().split(WORDS_REGEXP);
+    String[] splittedText =  this.prepareText(text);
 
     Map<String, Integer> alliterationMap = fillMapWithFirstLettersAndRepetitionCount(splittedText);
 
@@ -91,5 +92,16 @@ public class AlliterationServiceImpl implements AlliterationService  {
     if(text.isBlank()) {
       throw new TextNotEmptyException("Text cannot be blank.");
     }
+  }
+
+  /**
+   * Remove accents from the text and split it in an array of words
+   *
+   * @param text input text
+   * @return a plitted array of words from the text
+   */
+  private String[] prepareText(String text) {
+    text = StringUtils.stripAccents(text);
+    return text.trim().split(WORDS_REGEXP);
   }
 }
