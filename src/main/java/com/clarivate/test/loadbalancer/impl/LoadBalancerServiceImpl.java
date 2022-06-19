@@ -53,13 +53,6 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
         .reduce(0, Integer::sum);
 
     if(totalRequestsUsedInSum > numberOfRequests - 2) {
-
-//      for (Integer total : numberOfRequestsPerSum.values()) {
-//        if(totalRequestsUsedInSum - total == numberOfRequests - 2) {
-//          result = true;
-//        }
-//      }
-
       for(Map.Entry<Integer, Integer> entry : numberOfRequestsPerSum.entrySet()) {
         if(totalRequestsUsedInSum - entry.getValue() == numberOfRequests - 2) {
           if(numberOfRequestsPerSum.size() - 1 == 3) {
