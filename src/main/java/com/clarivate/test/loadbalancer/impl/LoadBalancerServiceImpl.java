@@ -3,31 +3,27 @@ package com.clarivate.test.loadbalancer.impl;
 import com.clarivate.test.loadbalancer.LoadBalancerService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class LoadBalancerServiceImpl implements LoadBalancerService {
 
   public boolean loadBalancer(Integer[] requests) {
     int sumAux = 0;
-    int requestCounter = 0;
     int requestCounterAux = 0;
-    int sumCounter = 0;
     boolean result = false;
-    boolean sumWithOneRequest = false;
+    Map<Integer, Integer> numberOfRequestsPerSum = new HashMap<>();
 
     int numberOfRequest = requests.length - 1;
 
     for(int i = 0; i <= numberOfRequest; i++) {
 
-      if(sumCounter >= 3) {
-        if(requestCounter <= requests.length - 2
-        || requestCounter == requests.length -1 && sumWithOneRequest) {
-          result = true;
-        }
+      if(numberOfRequestsPerSum.values().size() >= 3) {
+        result = checkIfTwoRequestsCanBeDropped(numberOfRequestsPerSum, requests.length);
       }
 
-      sumWithOneRequest = false;
-      sumCounter = 0;
-      requestCounter = 0;
+      numberOfRequestsPerSum = new HashMap<>();
       requestCounterAux = 0;
       sumAux = 0;
 
@@ -36,14 +32,8 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
           requestCounterAux++;
 
           if(sumAux == i) {
-
-            if(requestCounterAux == 1) {
-              sumWithOneRequest = true;
-            }
-
+            numberOfRequestsPerSum.put(j, requestCounterAux);
             sumAux = 0;
-            sumCounter++;
-            requestCounter += requestCounterAux;
             requestCounterAux = 0;
 
           } else if(sumAux > i) {
@@ -52,6 +42,38 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
           }
       }
     }
+    return result;
+  }
+
+  private boolean checkIfTwoRequestsCanBeDropped(Map<Integer, Integer> numberOfRequestsPerSum, Integer numberOfRequests) {
+    Boolean result = false;
+
+    Integer totalRequestsUsedInSum =
+      numberOfRequestsPerSum.values().stream()
+        .reduce(0, Integer::sum);
+
+    if(totalRequestsUsedInSum > numberOfRequests - 2) {
+
+//      for (Integer total : numberOfRequestsPerSum.values()) {
+//        if(totalRequestsUsedInSum - total == numberOfRequests - 2) {
+//          result = true;
+//        }
+//      }
+
+      for(Map.Entry<Integer, Integer> entry : numberOfRequestsPerSum.entrySet()) {
+        if(totalRequestsUsedInSum - entry.getValue() == numberOfRequests - 2) {
+          if(numberOfRequestsPerSum.size() - 1 == 3) {
+            result = true;
+          } else {
+            result = false;
+          }
+        }
+      }
+
+    } else if(totalRequestsUsedInSum == numberOfRequests - 2) {
+      result = true;
+    }
+
     return result;
   }
 }
