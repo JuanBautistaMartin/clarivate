@@ -33,3 +33,31 @@ Response:
 y 41.67 %
 ```
 
+## LoadBalancer exercise
+
+A simple restController was created in order to test the service:
+
+```
+URL: http://localhost:8080/alliteration/all
+
+VERB: POST
+
+Body: [1,3,4,2,2,2,1,1,2]
+
+Response:
+true
+```
+
+```
+URL: http://localhost:8080/alliteration/all
+
+VERB: POST
+
+Body: [1,1,1,1,1,1]
+
+Response:
+false
+```
+
+In this case unitary testing was created for the service but not for the controller because as 
+an example of controller unit tests and integration tests were done for the previous exercise.
