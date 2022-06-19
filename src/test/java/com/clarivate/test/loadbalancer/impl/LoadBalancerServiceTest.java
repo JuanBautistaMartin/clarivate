@@ -5,6 +5,7 @@ import com.clarivate.test.loadbalancer.LoadBalancerServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LoadBalancerServiceTest {
 
@@ -26,6 +27,30 @@ class LoadBalancerServiceTest {
   void loadBalancerWithEmptyArrayOfRequests() {
     // given
     Integer[] requests = {};
+
+    // when
+    boolean result = loadBalancerService.loadBalancer(requests);
+
+    // then
+    assertFalse(result);
+  }
+
+  @Test
+  void loadBalancerCanDistributeRequestProperly() {
+    // given
+    Integer[] requests = {1,3,4,2,2,2,1,1,2};
+
+    // when
+    boolean result = loadBalancerService.loadBalancer(requests);
+
+    // then
+    assertTrue(result);
+  }
+
+  @Test
+  void loadBalancerCannotDistributeRequestProperly() {
+    // given
+    Integer[] requests = {1,1,1,1,1,1};
 
     // when
     boolean result = loadBalancerService.loadBalancer(requests);
