@@ -9,16 +9,16 @@ import java.util.Map;
 public class LoadBalancerServiceImpl implements LoadBalancerService {
 
   public boolean loadBalancer(Integer[] requests) {
-      int sumAux = 0;
-      int requestCounterAux = 0;
-      boolean result = false;
+      var sumAux = 0;
+      var requestCounterAux = 0;
+      var result = false;
 
       if(this.checkIfRequestArrayIsNull(requests)) {
         Map<Integer, Integer> numberOfRequestsPerSum = new HashMap<>();
 
         int numberOfRequest = requests.length - 1;
 
-        for (int i = 0; i <= numberOfRequest; i++) {
+        for (var i = 0; i <= numberOfRequest; i++) {
 
           if (numberOfRequestsPerSum.values().size() >= 3) {
             result = checkIfTwoRequestsCanBeDropped(numberOfRequestsPerSum, requests.length);
@@ -28,7 +28,7 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
           requestCounterAux = 0;
           sumAux = 0;
 
-          for (int j = 0; j <= numberOfRequest; j++) {
+          for (var j = 0; j <= numberOfRequest; j++) {
             sumAux += requests[j];
             requestCounterAux++;
 
