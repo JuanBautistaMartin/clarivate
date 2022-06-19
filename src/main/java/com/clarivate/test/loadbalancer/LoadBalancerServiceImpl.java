@@ -47,6 +47,14 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
       return result;
   }
 
+  /**
+   * Checking if there are more than A[K] subArray of request and if two request can be removed in order to
+   * check if the loadBalancer can manage the full request array.
+   *
+   * @param numberOfRequestsPerSum the number of request that a worker can manage
+   * @param numberOfRequests total number of requests
+   * @return if it's possible for the loadBalcer to manage the full array of requests
+   */
   private boolean checkIfTwoRequestsCanBeDropped(Map<Integer, Integer> numberOfRequestsPerSum, Integer numberOfRequests) {
     Boolean result = false;
 
