@@ -9,11 +9,11 @@ import java.util.Map;
 public class LoadBalancerServiceImpl implements LoadBalancerService {
 
   public boolean loadBalancer(Integer[] requests) {
-      var sumAux = 0;
-      var requestCounterAux = 0;
       var result = false;
 
       if(this.checkIfRequestArrayIsNull(requests)) {
+        var sumAux = 0;
+        var requestCounterAux = 0;
         Map<Integer, Integer> numberOfRequestsPerSum = new HashMap<>();
 
         int numberOfRequest = requests.length - 1;
@@ -24,8 +24,14 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
             result = checkIfTwoRequestsCanBeDropped(numberOfRequestsPerSum, requests.length);
           }
 
+          // In this Map, one entry will be key=j, because we don't need an specific key, just unique one.
+          // And value will be the number of request that match A[i]
           numberOfRequestsPerSum = new HashMap<>();
+
+          // Variable to store the number of request for a given sum of A[j]
           requestCounterAux = 0;
+
+          // Variable to store the sum of A[j] for given i
           sumAux = 0;
 
           for (var j = 0; j <= numberOfRequest; j++) {
