@@ -23,7 +23,7 @@ public class AlliterationServiceImpl implements AlliterationService  {
   public String getAlliterationPercentagesOrderedDesc(String text) {
     checkIfTextIsBlank(text);
 
-    String[] splittedText =  text.split(WORDS_REGEXP);
+    String[] splittedText =  text.trim().split(WORDS_REGEXP);
 
     Map<String, Integer> alliterationMap = fillMapWithFirstLettersAndRepetitionCount(splittedText);
 
